@@ -18,7 +18,7 @@ module.exports = {
     // add your custom rules here
     'rules': {
         'indent': ["error", 4],
-        //"semi": ['off'],
+        // "semi": ['off'],close semi rules
         "semi": ['error','always'],
         // allow paren-less arrow functions
         'arrow-parens': 0,
