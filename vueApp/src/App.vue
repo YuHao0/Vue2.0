@@ -2,13 +2,11 @@
     <div id="app">
         <v-header></v-header>
         <div class="tab">
-            <div class="tab-item">商品</div>
-            <div class="tab-item">评论</div>
-            <div class="tab-item">商家</div>
+            <router-link class="tab-item" to="/goods">商品</router-link>
+            <router-link class="tab-item" to="/ratings">评论</router-link>
+            <router-link class="tab-item" to="/seller">商家</router-link>
         </div>
-        <div class="content">
-            content
-        </div>
+        <router-view></router-view>
     </div>
 </template>
 
@@ -29,5 +27,7 @@
             width:100%
             height:40px
             line-height:40px
-            justify-content: space-around;
+            justify-content: space-around
+            .tab-item
+                display: inline-block
 </style>
