@@ -10,7 +10,6 @@
     };
 </script>
 
-<style lang='stylus' rel='stylesheet/stylus'>
+<style rel="stylesheet/stylus" lang="stylus">
 
 </style>
-
