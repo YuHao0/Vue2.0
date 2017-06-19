@@ -9,7 +9,7 @@ export default new Router({
     routes: [
         {
             path: '/',
-            redirect: { name: 'goods' }
+            redirect: {name: 'goods'}
         },
         {
             path: '/goods',
@@ -26,5 +26,7 @@ export default new Router({
             name: 'seller',
             component: seller
         }
-    ]
+    ],
+    linkActiveClass: 'active',
+    linkExactActiveClass: 'exact-active'
 });

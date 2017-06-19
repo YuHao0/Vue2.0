@@ -10,6 +10,12 @@
             -webkit-transform: scaleY(0.5)
             transform: scaleY(0.5)
 
+@media (-webkit-min-device-pixel-ratio: 3),(min-device-aspect-ratio: 3)
+    .border-1px
+        &::after
+            -webkit-transform: scaleY(0.3)
+            transform: scaleY(0.3)
+
 body, html {
 
     font-weight 200px
