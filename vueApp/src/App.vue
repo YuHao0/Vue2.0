@@ -20,11 +20,10 @@
             };
         },
         created() {
-            this.$http.get('/api/seller').then((result) => {
+            this.$http.get('/api/seller').then(function (result) {
                 result = result.body;
                 if (result.errorCode === ERR_OK) {
                     this.seller = result.data;
-                    console.log(this.seller);
                 }
             });
         },
@@ -32,10 +31,9 @@
             'v-header': header
         }
     };
-
 </script>
 
-<style type="text/stylus" lang="stylus" rel="stylesheet/stylus" >
+<style type="text/stylus" lang="stylus" rel="stylesheet/stylus">
     @import "./common/stylus/mixin.styl"
 
     .tab

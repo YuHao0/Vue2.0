@@ -2,7 +2,7 @@
     <div class="header">
         <div class="content-wrapper">
             <div class="avatar">
-                <img  width="64" height="64" :src="seller.avatar" alt=""/>
+                <img width="64" height="64" :src="seller.avatar" alt=""/>
             </div>
             <div class="content">
                 <div class="title">
@@ -10,7 +10,7 @@
                     <span class="name">{{seller.name}}</span>
                 </div>
                 <div class="description">
-                    {{seller.description}}/{{seller.description}}分钟送达
+                    {{seller.description}}/{{seller.deliveryTime}}分钟送达
                 </div>
             </div>
         </div>
@@ -21,9 +21,7 @@
 <script type='text/ecmascript-6'>
     export default{
         props: {
-            seller: {
-                type: {}
-            }
+            seller: Object
         }
     };
 </script>
