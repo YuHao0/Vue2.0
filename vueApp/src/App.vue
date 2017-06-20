@@ -1,6 +1,6 @@
 <template>
     <div id="app">
-        <v-header></v-header>
+        <v-header :seller="seller"></v-header>
         <div class="tab border-1px">
             <router-link class="tab-item" to="/goods">商品</router-link>
             <router-link class="tab-item" to="/ratings">评论</router-link>
@@ -12,7 +12,7 @@
 
 <script type='text/ecmascript-6'>
     import header from 'components/header/header.vue';
-
+    const ERR_OK = 0;
     export default {
         data() {
             return {
@@ -21,7 +21,11 @@
         },
         created() {
             this.$http.get('/api/seller').then((result) => {
-                    console.log(result);
+                result = result.body;
+                if (result.errorCode === ERR_OK) {
+                    this.seller = result.data;
+                    console.log(this.seller);
+                }
             });
         },
         components: {
@@ -31,7 +35,7 @@
 
 </script>
 
-<style type="text/stylus">
+<style type="text/stylus" lang="stylus" rel="stylesheet/stylus" >
     @import "./common/stylus/mixin.styl"
 
     .tab
