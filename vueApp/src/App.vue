@@ -10,17 +10,28 @@
     </div>
 </template>
 
-<script>
+<script type='text/ecmascript-6'>
     import header from 'components/header/header.vue';
 
     export default {
+        data() {
+            return {
+                seller: {}
+            };
+        },
+        created() {
+            this.$http.get('/api/seller').then((result) => {
+                    console.log(result);
+            });
+        },
         components: {
             'v-header': header
         }
     };
+
 </script>
 
-<style rel="stylesheet/stylus" lang="stylus">
+<style type="text/stylus">
     @import "./common/stylus/mixin.styl"
 
     .tab
