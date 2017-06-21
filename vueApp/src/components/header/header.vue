@@ -31,7 +31,8 @@
         <div v-show="detailShow" class="detail" @click="showDetail">
             <div class="detail-wrapper clearfix">
                 <div class="detail-content">
-
+                    <h1 class="name">{{seller.name}}</h1>
+                    <star :size="48" :score="seller.score"></star>
                 </div>
             </div>
             <div class="detail-close">
@@ -42,6 +43,7 @@
 </template>
 
 <script type='text/ecmascript-6'>
+    import star from 'components/star/star';
     let $this;
     export default{
         props: {
@@ -55,6 +57,9 @@
         created() {
             $this = this;
             $this.supportIcon = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+        },
+        components: {
+            star
         },
         methods: {
             showDetail: function () {
@@ -187,11 +192,17 @@
             background: rgba(7, 17, 27.0 .8)
             fliter: blur(10px)
             .detail-wrapper
+                width: 100%
                 min-height: 100%
                 overflow: hidden
                 .detail-content
                     margin-top: 64px
                     padding-bottom: 64px
+                    .name
+                        line-height: 16px
+                        text-align: center
+                        font-size: 16px
+                        font-weight: 700
             .detail-close
                 position: relative
                 width: 32px
