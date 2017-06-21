@@ -16,7 +16,9 @@
     export default {
         data() {
             return {
-                seller: {}
+                seller: {
+                    loading: false
+                }
             };
         },
         created() {
@@ -24,6 +26,7 @@
                 result = result.body;
                 if (result.errorCode === ERR_OK) {
                     this.seller = result.data;
+                    this.seller.loading = true;
                 }
             });
         },
@@ -34,7 +37,7 @@
 </script>
 
 <style type="text/stylus" lang="stylus" rel="stylesheet/stylus">
-    @import "./common/stylus/mixin.styl"
+    @import "./common/stylus/mixin"
 
     .tab
         display: flex
@@ -44,9 +47,9 @@
         border-1px(rgba(7, 17, 27, 0.1))
         .tab-item
             flex: 1
-            text-align center
+            text-align: center
             display: block
-            font-size 14px
+            font-size: 14px
             color: rgb(77, 85, 93)
         .active
             color: rgb(240, 20, 20)

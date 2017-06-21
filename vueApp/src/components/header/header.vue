@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-        <div class="content-wrapper">
+        <div class="content-wrapper" v-show="seller.loading">
             <div class="avatar">
                 <img width="64" height="64" :src="seller.avatar" alt=""/>
             </div>
@@ -12,20 +12,192 @@
                 <div class="description">
                     {{seller.description}}/{{seller.deliveryTime}}分钟送达
                 </div>
+                <div v-if="seller.supports" class="support">
+                    <span class="icon" v-bind:class="supportIcon[seller.supports[0].type]"></span>
+                    <span class="text">{{seller.supports[0].description}}</span>
+                </div>
+            </div>
+            <div v-if="seller.supports" class="support-count" @click="showDetail">
+                <span class="count">{{seller.supports.length}}个</span>
+                <i class="iconfont icon-arrow-right"></i>
             </div>
         </div>
-        <div class="bulletin"></div>
+        <div class="bulletin" @click="showDetail">
+            <span class="bulletin-img"></span><!--
+            --><span class="bulletin-text">{{seller.bulletin}}</span>
+            <i class="iconfont icon-arrow-right"></i>
+        </div>
+        <img :src="seller.avatar" class="background">
+        <div v-show="detailShow" class="detail" @click="showDetail">
+            <div class="detail-wrapper clearfix">
+                <div class="detail-content">
+
+                </div>
+            </div>
+            <div class="detail-close">
+                <i class="iconfont icon-close"></i>
+            </div>
+        </div>
     </div>
 </template>
 
 <script type='text/ecmascript-6'>
+    let $this;
     export default{
         props: {
             seller: Object
+        },
+        data() {
+            return {
+                detailShow: false
+            };
+        },
+        created() {
+            $this = this;
+            $this.supportIcon = ['decrease', 'discount', 'special', 'invoice', 'guarantee'];
+        },
+        methods: {
+            showDetail: function () {
+                $this.detailShow = !$this.detailShow;
+            }
         }
     };
 </script>
 
 <style type="text/stylus" rel="stylesheet/stylus" lang="stylus">
+    @import "../../common/stylus/mixin"
 
+    .header
+        position: relative
+        overflow: hidden
+        color: #fff
+        background: rgba(7, 17, 27, 0.5)
+        .background
+            position: absolute
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            filter: blur(10px)
+            z-index: -1
+        .content-wrapper
+            position: relative
+            padding: 24px 12px 18px 24px
+            font-size: 0
+            .avatar
+                display: inline-block
+                vertical-align: top
+                img
+                    border-radius: 2px
+            .content
+                display: inline-block
+                margin-left: 16px
+                .title
+                    margin: 2px 0 8px 0
+                    .brand
+                        display: inline-block
+                        width: 30px
+                        height: 18px
+                        bg-image('brand')
+                        background-size: 30px 18px
+                        background-repeat: no-repeat
+                        vertical-align: top
+                    .name
+                        margin-left: 6px
+                        font-size: 16px;
+                        line-height: 18px
+                        font-weight: bold
+                .description
+                    margin-bottom: 10px
+                    line-height: 12px
+                    font-size: 12px
+                .support
+                    .icon
+                        display: inline-block
+                        width: 12px
+                        height: 12px
+                        margin-right: 4px
+                        background-size: 12px 12px
+                        background-repeat: no-repeat
+                        vertical-align: top
+                        &.decrease
+                            bg-image('decrease_1')
+                        &.discount
+                            bg-image('discount_1')
+                        &.guarantee
+                            bg-image('guarantee_1')
+                        &.invoice
+                            bg-image('invoice_1')
+                        &.special
+                            bg-image('special_1')
+                    .text
+                        line-height: 12px
+                        font-size: 10px
+            .support-count
+                position: absolute
+                bottom: 18px
+                right 12px
+                padding: 0 8px
+                height: 24px
+                line-height: 22px
+                border-radius: 14px
+                background: rgba(0, 0, 0, 0.2)
+                .count
+                    font-size: 10px
+                .icon-arrow-right
+                    margin-left: 2px
+                    line-height: 24px
+                    font-size: 10px
+        .bulletin
+            position: relative
+            height: 28px
+            line-height: 28px
+            padding: 0 22px 0 12px
+            background: rgba(7, 17, 27, 0.2)
+            white-space: nowrap
+            overflow: hidden
+            text-overflow: ellipsis
+            .bulletin-img
+                display: inline-block
+                width: 22px
+                height: 12px
+                margin-top: 8px
+                bg-image('bulletin')
+                background-size: 22px 12px
+                background-repeat: no-repeat
+                vertical-align: top
+            .bulletin-text
+                margin: 0 4px
+                font-size: 10px
+                vertical-align: top
+            .icon-arrow-right
+                position: absolute
+                right: 12px
+                bottom: 9px
+                font-size: 10px
+
+        .detail
+            position: fixed
+            z-index: 100
+            top: 0
+            left: 0
+            width: 100%
+            height: 100%
+            overflow-y: auto
+            background: rgba(7, 17, 27.0 .8)
+            fliter: blur(10px)
+            .detail-wrapper
+                min-height: 100%
+                overflow: hidden
+                .detail-content
+                    margin-top: 64px
+                    padding-bottom: 64px
+            .detail-close
+                position: relative
+                width: 32px
+                height: 32px
+                margin: -64px auto 0
+                text-align: center
+                clear: both
+                font-size: 32px
 </style>
