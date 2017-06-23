@@ -16,7 +16,7 @@
                     <ul>
                         <li v-for="food in item.foods" class="food-item">
                             <div class="food-icon">
-                                <img width="57"  height="57" :src="food.icon">
+                                <img width="57" height="57" :src="food.icon">
                             </div>
                             <div class="food-content">
                                 <h2 class="food-name">{{food.name}}</h2>
@@ -41,6 +41,8 @@
 </template>
 
 <script type='text/ecmascript-6'>
+    import BScroll from 'better-scroll';
+
     export default{
         props: {
             seller: Object
@@ -56,8 +58,15 @@
                 result = result.body;
                 if (result.errorCode === 0) {
                     this.goods = result.data;
+                    this.initScroll();
                 }
             });
+        },
+        methods: {
+            initScroll: function () {
+                this.menuScroll = new BScroll(this.$els.menuWrapper, {});
+                this.foodScroll = new BScroll(this.$els.foodWrapper, {})
+            }
         }
     };
 </script>
@@ -75,9 +84,6 @@
             flex: 0 0 80px
             width: 80px
             background: #f3f5f7
-            .menu-list
-                overflow-y: auto;
-                height: 100%;
             .menu-item
                 display: table
                 height: 54px
