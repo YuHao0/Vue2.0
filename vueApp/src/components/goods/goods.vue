@@ -1,15 +1,15 @@
 <template>
     <div class="goods">
-        <div class="menu-wrapper">
+        <div class="menu-wrapper" ref="menuWrapper">
             <ul class="menu-list">
-                <li v-for="item in goods" class="menu-item">
+                <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}">
                     <span class="text">
                         <span v-show="item.type>0" class="type-icon" v-bind:class="supportIcon[item.type]"></span>{{item.name}}
                     </span>
                 </li>
             </ul>
         </div>
-        <div class="foods-wrapper">
+        <div class="foods-wrapper" ref="foodsWrapper">
             <ul>
                 <li v-for="item in goods" class="food-list">
                     <h1 class="food-title">{{item.name}}</h1>
@@ -50,22 +50,55 @@
         data() {
             return {
                 goods: [],
-                supportIcon: ['decrease', 'discount', 'special', 'invoice', 'guarantee']
+                supportIcon: ['decrease', 'discount', 'special', 'invoice', 'guarantee'],
+                listHeight: [],
+                scrollY: ''
             };
+        },
+        computed: {
+            currentIndex() {
+                for (let i = 0; i < this.listHeight.length; i++) {
+                    let height1 = this.listHeight[i];
+                    let height2 = this.listHeight[i + 1];
+                    if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+                        return i;
+                    }
+                }
+                return 0;
+            }
         },
         created() {
             this.$http.get('/api/goods').then((result) => {
                 result = result.body;
                 if (result.errorCode === 0) {
                     this.goods = result.data;
-                    this.initScroll();
+                    this.currentIndex = 0;
+                    this.$nextTick(() => {
+                        this.initScroll();
+                        this.calculateHeight();
+                    });
                 }
             });
         },
         methods: {
             initScroll: function () {
-                this.menuScroll = new BScroll(this.$els.menuWrapper, {});
-                this.foodScroll = new BScroll(this.$els.foodWrapper, {})
+                this.menuScroll = new BScroll(this.$refs.menuWrapper, {});
+                this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
+                    probeType: 3
+                });
+                this.foodScroll.on('scroll', (pos) => {
+                    this.scrollY = Math.abs(Math.round(pos.y));
+                });
+            },
+            calculateHeight: function () {
+                let foodList = this.$refs.foodsWrapper.children[0].children;
+                let height = 0;
+                this.listHeight.push(height);
+                for (let i = 0; i < foodList.length; i++) {
+                    let item = foodList[i];
+                    height += item.clientHeight;
+                    this.listHeight.push(height);
+                }
             }
         }
     };
@@ -115,6 +148,14 @@
                     vertical-align: middle
                     font-size: 12px
                     border-1px(rgba(7, 17, 27, 0.1))
+            .current
+                position: relative
+                z-index: 10
+                background: #fff
+                margin-top: -1px
+                font-weight: 700
+                .text:after
+                    display :none
         .foods-wrapper
             flex: 1
             .food-list
