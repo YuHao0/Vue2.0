@@ -2,7 +2,8 @@
     <div class="goods">
         <div class="menu-wrapper" ref="menuWrapper">
             <ul class="menu-list">
-                <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}">
+                <li v-for="(item,index) in goods" class="menu-item" :class="{'current':currentIndex===index}"
+                    @click="selectMenu(index,$event)">
                     <span class="text">
                         <span v-show="item.type>0" class="type-icon" v-bind:class="supportIcon[item.type]"></span>{{item.name}}
                     </span>
@@ -37,12 +38,13 @@
                 </li>
             </ul>
         </div>
+        <shopcart></shopcart>
     </div>
 </template>
 
 <script type='text/ecmascript-6'>
     import BScroll from 'better-scroll';
-
+    import shopcart from 'components/shopcart/shopcart';
     export default{
         props: {
             seller: Object
@@ -61,6 +63,7 @@
                     let height1 = this.listHeight[i];
                     let height2 = this.listHeight[i + 1];
                     if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
+                        this.menuScroll.scrollToElement(this.$refs.menuWrapper.children[0].children[i], 300, 0, 0);
                         return i;
                     }
                 }
@@ -82,7 +85,9 @@
         },
         methods: {
             initScroll: function () {
-                this.menuScroll = new BScroll(this.$refs.menuWrapper, {});
+                this.menuScroll = new BScroll(this.$refs.menuWrapper, {
+                    click: true
+                });
                 this.foodScroll = new BScroll(this.$refs.foodsWrapper, {
                     probeType: 3
                 });
@@ -99,7 +104,18 @@
                     height += item.clientHeight;
                     this.listHeight.push(height);
                 }
+            },
+            selectMenu: function (index, event) {
+                if (!event._constructed) {
+                    return;
+                }
+                let foodList = this.$refs.foodsWrapper.children[0].children;
+                let el = foodList[index];
+                this.foodScroll.scrollToElement(el, 300);
             }
+        },
+        components: {
+            'shopcart': shopcart
         }
     };
 </script>
@@ -153,9 +169,10 @@
                 z-index: 10
                 background: #fff
                 margin-top: -1px
-                font-weight: 700
+                .text
+                    font-weight: 700
                 .text:after
-                    display :none
+                    display: none
         .foods-wrapper
             flex: 1
             .food-list
