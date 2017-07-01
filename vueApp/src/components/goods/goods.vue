@@ -38,7 +38,7 @@
                 </li>
             </ul>
         </div>
-        <shopcart></shopcart>
+        <shopcart :seller="seller"></shopcart>
     </div>
 </template>
 
