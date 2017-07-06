@@ -41,7 +41,7 @@
                 </li>
             </ul>
         </div>
-        <shopcart :seller="seller"></shopcart>
+        <shopcart :seller="seller" :select-foods="selectFoods"></shopcart>
     </div>
 </template>
 
@@ -72,6 +72,15 @@
                     }
                 }
                 return 0;
+            },
+            selectFoods() {
+                let foods = [];
+                this.goods.forEach((good) => {
+                    good.foods.forEach((food) => {
+                        food.count && foods.push(food);
+                    });
+                });
+                return foods;
             }
         },
         created() {

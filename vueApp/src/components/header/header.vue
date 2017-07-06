@@ -213,10 +213,9 @@
             overflow-y: auto
             backdrop-filter: blur(10px)
             background: rgba(7, 17, 27, 0.8)
-            &.fade-enter-active, &.fade-leave-active {
+            &.fade-enter-active, &.fade-leave-active
                 transition: opacity 0.5s
-            }
-            &.fade-enter, &.fade-leave-active
+            &.fade-enter, &.fade-leave-to
                 opacity: 0
             .detail-wrapper
                 width: 100%

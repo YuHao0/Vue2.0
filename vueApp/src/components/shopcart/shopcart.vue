@@ -12,12 +12,12 @@
                     ￥{{totalPrice}}
                 </div>
                 <div class="description" >
-                    {{payDesc}}
+                    另需配送费{{seller.deliveryPrice}}
                 </div>
             </div>
             <div class="content-right">
                 <div class="pay" :class="{'enough':this.totalPrice >= this.seller.minPrice}">
-                    ￥{{seller.minPrice}}元起送
+                    {{payDesc}}
                 </div>
             </div>
         </div>
