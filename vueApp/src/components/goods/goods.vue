@@ -33,7 +33,7 @@
                                     --><span class="old-price" v-show="food.oldPrice">{{food.oldPrice}}</span>
                                 </div>
                                 <div class="cart-control-wrapper">
-                                    <cartControl :food="food"></cartControl>
+                                    <cartControl @drop="dropBall" :food="food"></cartControl>
                                 </div>
                             </div>
                         </li>
@@ -41,11 +41,12 @@
                 </li>
             </ul>
         </div>
-        <shopcart :seller="seller" :select-foods="selectFoods"></shopcart>
+        <shopcart ref="shopcart" :seller="seller" :select-foods="selectFoods"></shopcart>
     </div>
 </template>
 
 <script type='text/ecmascript-6'>
+    import Vue from 'vue';
     import BScroll from 'better-scroll';
     import shopcart from 'components/shopcart/shopcart';
     import cartControl from 'components/cartControl/cartControl';
@@ -95,6 +96,7 @@
                     });
                 }
             });
+            new Vue().$on('add-cart', this.dropBall);
         },
         methods: {
             initScroll: function () {
@@ -126,6 +128,12 @@
                 let foodList = this.$refs.foodsWrapper.children[0].children;
                 let el = foodList[index];
                 this.foodScroll.scrollToElement(el, 300);
+            },
+            dropBall(target) {
+                this.$nextTick(() => {
+                    // 避免动画同步执行导致性能问题
+                    this.$refs.shopcart.drop(target);
+                });
             }
         },
         components: {

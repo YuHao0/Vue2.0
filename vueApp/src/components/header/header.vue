@@ -205,18 +205,20 @@
                 font-size: 10px
         .detail
             position: fixed
-            z-index: 100
+            z-index: 1000
             top: 0
             left: 0
             width: 100%
             height: 100%
+            opacity: 1
             overflow-y: auto
             backdrop-filter: blur(10px)
             background: rgba(7, 17, 27, 0.8)
             &.fade-enter-active, &.fade-leave-active
-                transition: opacity 0.5s
+                transition: all 0.5s
             &.fade-enter, &.fade-leave-to
                 opacity: 0
+                background: rgba(7, 17, 27, 0)
             .detail-wrapper
                 width: 100%
                 min-height: 100%

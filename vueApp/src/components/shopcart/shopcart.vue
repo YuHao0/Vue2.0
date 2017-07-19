@@ -3,7 +3,7 @@
         <div class="content">
             <div class="content-left">
                 <div class="logo-wrapper">
-                    <div class="logo" :class="{'highlight':totalCount>0}">
+                    <div class="logo" :class="{'highlight':totalCount>0}" ref="logo">
                         <i class="iconfont icon-shopcart"></i>
                     </div>
                     <div class="num" v-show="totalCount>0">{{totalCount}}</div>
@@ -11,7 +11,7 @@
                 <div class="price" :class="{'highlight':totalPrice>0}">
                     ￥{{totalPrice}}
                 </div>
-                <div class="description" >
+                <div class="description">
                     另需配送费{{seller.deliveryPrice}}
                 </div>
             </div>
@@ -19,6 +19,15 @@
                 <div class="pay" :class="{'enough':this.totalPrice >= this.seller.minPrice}">
                     {{payDesc}}
                 </div>
+            </div>
+        </div>
+        <div class="ball-container">
+            <div v-for="ball in balls">
+                <transition name="drop" @before-enter="beforeDrop" @enter="dropping" @after-enter="afterDrop">
+                    <div class="ball" v-show="ball.show">
+                        <div class="ball-inner ball-hook"></div>
+                    </div>
+                </transition>
             </div>
         </div>
     </div>
@@ -34,6 +43,22 @@
                 }
             },
             seller: Object
+        },
+        data() {
+            return {
+                balls: [{
+                    show: false
+                }, {
+                    show: false
+                }, {
+                    show: false
+                }, {
+                    show: false
+                }, {
+                    show: false
+                }],
+                dropBalls: []
+            };
         },
         computed: {
             totalPrice() {
@@ -59,6 +84,59 @@
                 } else {
                     return '去结算';
                 }
+            }
+        },
+        methods: {
+            drop(element) {
+                for (let i = 0; i < this.balls.length; i++) {
+                    let item = this.balls[i];
+                    if (!item.show) {
+                        item.show = true;
+                        item.el = element;
+                        this.dropBalls.push(item);
+                        return;
+                    }
+                }
+            },
+            beforeDrop(el) {
+                let count = this.balls.length;
+                while (count--) {
+                    let ball = this.balls[count];
+                    if (ball.show) {
+                        let rect = ball.el.getBoundingClientRect();
+                        let x = rect.left - 32;
+                        let y = -(window.innerHeight - rect.top - 22);
+                        el.style.display = '';
+                        el.style.webkitTransform = `translate3d(0,${y}px,0)`;
+                        el.style.transform = `translate3d(0,${y}px,0)`;
+                        let inner = el.getElementsByClassName('ball-hook')[0];
+                        inner.style.webkitTransform = `translate3d(${x}px,0,0)`;
+                        inner.style.transform = `translate3d(${x}px,0,0)`;
+                    }
+                }
+            },
+            dropping(el, done) {
+                /* eslint-disable no-unused-vars */
+                let rf = el.offsetHeight;
+                this.$nextTick(() => {
+                    el.style.webkitTransform = 'translate3d(0,0,0)';
+                    el.style.transform = 'translate3d(0,0,0)';
+                    let inner = el.getElementsByClassName('ball-hook')[0];
+                    inner.style.webkitTransform = 'translate3d(0,0,0)';
+                    inner.style.transform = 'translate3d(0,0,0)';
+                    el.addEventListener('transitionend', done);
+                    setTimeout(() => {
+                        this.$refs.logo.style.transform = 'scale(0.5)';
+                    }, 0.5);
+                });
+            },
+            afterDrop(el) {
+                let ball = this.dropBalls.shift();
+                if (ball) {
+                    ball.show = false;
+                    el.style.display = 'none';
+                }
+                this.$refs.logo.style.transform = 'scale(1)';
             }
         }
     };
@@ -98,6 +176,7 @@
                         border-radius: 50%
                         background: #2b343c
                         text-align: center
+                        transition: all 0.5s
                         &.highlight
                             background: rgb(0, 160, 220)
                             .icon-shopcart
@@ -148,6 +227,19 @@
                     font-weight: 700
                     background: #2b333b
                     &.enough
-                        background :#00b43c
-                        color:#fff
+                        background: #00b43c
+                        color: #fff
+        .ball-container
+            .ball
+                position: fixed
+                bottom: 22px
+                left: 32px
+                z-index: 200
+                transition: all 0.5s cubic-bezier(0.49, -0.29, 0.75, 0.41)
+                .ball-inner
+                    width: 16px
+                    height: 16px
+                    border-radius: 50%
+                    background: rgb(0, 160, 220)
+                    transition: all 0.5s linear
 </style>
