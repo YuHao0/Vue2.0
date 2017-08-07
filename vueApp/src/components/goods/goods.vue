@@ -89,7 +89,6 @@
                 result = result.body;
                 if (result.errorCode === 0) {
                     this.goods = result.data;
-                    this.currentIndex = 0;
                     this.$nextTick(() => {
                         this.initScroll();
                         this.calculateHeight();
